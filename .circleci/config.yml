@@ -43,7 +43,8 @@ jobs:
             aws lambda update-function-code 
             --region=${AWS_REGION}
             --function-name=EmailSender  
-            --zip-file fileb://lambda.zip
+            --zip-file fileb://lambda.zip > 
+            temp.txt
 
 workflows:
   version: 2
