@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Update zip in lambda function
           command: >
-            export TERM=xterm && aws lambda update-function-code 
+            aws lambda update-function-code 
             --region=${AWS_REGION}
             --function-name=EmailSender  
             --zip-file fileb://lambda.zip
