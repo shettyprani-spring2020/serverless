@@ -23,7 +23,7 @@ formatEmail = function(bills) {
   for (let bill of bills) {
     result += "<tr>";
     for (let prop in bill) {
-      result += "<td>" + object[prop] + "</td>";
+      result += "<td>" + bill[prop] + "</td>";
     }
     result += "</tr>";
   }
@@ -46,7 +46,7 @@ exports.handler = async function(event, context, callback) {
   };
   let result = await dynamodb.getItem(db_params).promise();
   console.log(result);
-  let now = Date.now();
+  let now = Date.now() / 1000;
   if (Object.keys(result).length === 0) {
     const ttl_time = Date.now() / 1000 + 60 * 60;
     const db_data = {
@@ -58,8 +58,7 @@ exports.handler = async function(event, context, callback) {
     };
     result = await dynamodb.putItem(db_data).promise();
   } else {
-    const last_sent = result.Item.TTL;
-    console.log("Item exists!");
+    const last_sent = parseInt(result.Item.TTL.N);
     if (last_sent >= now) {
       console.log("Email sent within the last 1 hour! \nNot resending!");
       return;
