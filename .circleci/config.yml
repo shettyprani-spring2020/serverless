@@ -30,13 +30,17 @@ jobs:
           name: Showing files in folder
           command: ls -l
       - run:
+          name: Install aws dependencies
+          command: |
+            sudo apt-get install -y less
+      - run:
           name: Zip up files
           command: |
             zip -r lambda.zip index.js node_modules/
       - run:
           name: Update zip in lambda function
           command: >
-            aws lambda update-function-code 
+            export TERM=xterm && aws lambda update-function-code 
             --region=${AWS_REGION}
             --function-name=EmailSender  
             --zip-file fileb://lambda.zip
