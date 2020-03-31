@@ -34,10 +34,18 @@ jobs:
           command: |
             sudo apt-get install -y less
       - run:
+          name: Give scripts executable permission
+          command: |
+            cd scripts
+            sudo chmod +x *.sh
+            ls -al
+            cd ..
+            ls -l
+      - run:
           name: Move files
           command: |
             mkdir ${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}
-            mv -t ./${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM} index.js node_modules/
+            mv -t ./${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM} index.js scripts appspec.yml
             ls -l
             pwd
             cd ${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}

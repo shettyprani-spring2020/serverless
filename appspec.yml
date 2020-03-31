@@ -4,8 +4,9 @@ Resources:
       Type: AWS::Lambda::Function
       Properties:
         Name: "EmailSender"
+        Alias: alias-of-lambda-function-to-deploy
         CurrentVersion: "1"
         TargetVersion: "2"
 Hooks:
-  - BeforeAllowTraffic: "TrafficControl.handler"
-  - AfterAllowTraffic: "TrafficControl.handler"
+  - BeforeAllowTraffic: "scripts/TrafficControl.handler"
+  - AfterAllowTraffic: "scripts/TrafficControl.handler"
