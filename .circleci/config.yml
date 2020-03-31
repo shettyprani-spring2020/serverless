@@ -37,7 +37,7 @@ jobs:
           name: Give scripts executable permission
           command: |
             cd scripts
-            sudo chmod +x *.sh
+            sudo chmod +x *.js
             ls -al
             cd ..
             ls -l
