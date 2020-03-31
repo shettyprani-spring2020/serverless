@@ -34,17 +34,32 @@ jobs:
           command: |
             sudo apt-get install -y less
       - run:
-          name: Zip up files
+          name: Move files
           command: |
-            zip -r lambda.zip index.js node_modules/
+            mkdir ${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}
+            mv -t ./${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM} index.js node_modules/
+            ls -l
+            pwd
+            cd ${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}
+            pwd
+            ls -l
+            cd ..
       - run:
-          name: Update zip in lambda function
+          name: Push to AWS S3
           command: >
-            aws lambda update-function-code 
-            --region=${AWS_REGION}
-            --function-name=EmailSender  
-            --zip-file fileb://lambda.zip > 
-            temp.txt
+            aws deploy push
+            --application-name ${APPLICATION_NAME}
+            --source ./${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}
+            --s3-location s3://${S3BUCKET}/${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}.zip
+      - run:
+          name: Create new revision deployment
+          command: >
+            aws deploy create-deployment
+            --application-name ${APPLICATION_NAME}
+            --deployment-group-name ${DEVELOPMENT_GROUP_NAME}
+            --file-exists-behavior OVERWRITE
+            --ignore-application-stop-failures
+            --s3-location bucket=${S3BUCKET},key=${CIRCLE_PROJECT_REPONAME}_${CIRCLE_BUILD_NUM}.zip,bundleType=zip
 
 workflows:
   version: 2
