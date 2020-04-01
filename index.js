@@ -2,32 +2,11 @@ let AWS = require("aws-sdk");
 let dynamodb = new AWS.DynamoDB();
 
 formatEmail = function(bills) {
-  let result =
-    '<table class="table table-bordered table-hover table-condensed">' +
-    "<thead><tr>" +
-    "<th>id</th>" +
-    "<th>created_ts</th>" +
-    "<th>updated_ts</th>" +
-    "<th>vendor</th>" +
-    "<th>bill_date</th>" +
-    "<th>due_date</th>" +
-    "<th>amount_due</th>" +
-    "<th>categories</th>" +
-    "<th>paymentStatus</th>" +
-    "<th>createdAt</th>" +
-    "<th>updatedAt</th>" +
-    "<th>owner_id</th>" +
-    "<th>file</th>" +
-    "</tr></thead>" +
-    "<tbody>";
+  let result = "<ol>";
   for (let bill of bills) {
-    result += "<tr>";
-    for (let prop in bill) {
-      result += "<td>" + bill[prop] + "</td>";
-    }
-    result += "</tr>";
+    result += "<li>" + bill + "</li>";
   }
-  result += "</tbody></table>";
+  result += "</ol>";
   return result;
 };
 
@@ -74,7 +53,7 @@ exports.handler = async function(event, context, callback) {
         Html: {
           Charset: "UTF-8",
           Data:
-            "<html><body><h1>Requested Data for payment due</h1>" +
+            "<html><body><h1>Requested data for bills payment due</h1>" +
             formatEmail(bills) +
             "</body></html>"
         }
